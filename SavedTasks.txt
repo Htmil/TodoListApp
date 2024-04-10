@@ -1,0 +1,4 @@
+1,Clean Wardrobe,2024-04-20 00:00:00,False,CleanUP
+2,Watch Fotball,2024-05-01 00:00:00,True,Entertainment
+3,TEST2,2023-03-03 00:00:00,False,TESTER
+4,ID CHECK,2055-05-05 00:00:00,False,CHECK
