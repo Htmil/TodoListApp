@@ -6,11 +6,15 @@
 
 ## Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/your-username/TodoListApp.git
-
-
+   cd TodoListApp
+   ```
+2. **Build the application:**
+   ```bash
+    dotnet build
+   ```
 ## Usage
 
 To use the application, follow these steps:
