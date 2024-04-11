@@ -1,6 +1,10 @@
-1,Clean Wardrobe,2024-04-20 00:00:00,False,CleanUP
-2,Watch Fotball,2024-05-01 00:00:00,True,Entertainment
-3,Test Code,2023-03-03 00:00:00,True,TESTER
-4,Eat Breakfast,2024-05-01 00:00:00,False,CHECK
-5,Clean Code,2024-04-05 00:00:00,True,TEST
-6,REMOVE ME!,2100-01-01 00:00:00,False,REMOVE
+1,Finish presentation slides,2024-04-15 00:00:00,False,Presentation
+2,Review project code,2024-04-12 00:00:00,True,Coding
+3,Call client for project update,2024-04-20 00:00:00,True,Client Communication
+4,Grocery shopping,2024-04-11 00:00:00,True,Personal
+5,Draft email to team members,2024-04-14 00:00:00,False,Communication
+6,Pay electricity bill,2024-04-18 00:00:00,True,Bills
+7,Prepare for meeting with stakeholders,2024-04-16 00:00:00,False,Stakeholder Engagement
+8,Update project documentation,2024-04-13 00:00:00,True,Documentation
+9,Call mom for her birthday,2024-04-19 00:00:00,False,Personal
+10,Plan weekend getaway,2024-04-22 00:00:00,False,Personal
