@@ -8,7 +8,7 @@
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/TodoListApp.git
+   git clone https://github.com/Htmil/TodoListApp.git
    cd TodoListApp
    ```
 2. **Build the application:**
