@@ -2,13 +2,12 @@
 Console.ForegroundColor = ConsoleColor.White;
 
 string filePath = @"C:\Users\Maja\Desktop\Individual Project\TodoListApp\SavedTasks.txt";
-List<Task> tasksList = new List<Task>();
+List<TodoListApp.Task> tasksList = new List<TodoListApp.Task>();
 
 ReadFromTextFile();
 ShowMenu("main");
 
-
-void AddTask(List<Task> taskslist, string filePath)
+void AddTask(List<TodoListApp.Task> taskslist, string filePath)
 {
 
     int id;
@@ -16,7 +15,6 @@ void AddTask(List<Task> taskslist, string filePath)
     DateTime dueDate;
     bool status = false;
     string project;
-
     id = taskslist.Count + 1;
 
     while (true)
@@ -63,7 +61,7 @@ void AddTask(List<Task> taskslist, string filePath)
         }
     }
 
-    Task newTask = new Task(id, title, dueDate, status, project);
+    TodoListApp.Task newTask = new TodoListApp.Task(id, title, dueDate, status, project);
     tasksList.Add(newTask);
 }
 void ReadFromTextFile()
@@ -82,7 +80,7 @@ void ReadFromTextFile()
         bool status = Convert.ToBoolean(entries[3]);
         string project = entries[4];
 
-        Task newTask = new Task(id, title, dueDate, status, project); // create an new instance of the class Task.
+        TodoListApp.Task newTask = new TodoListApp.Task(id, title, dueDate, status, project); // create an new instance of the class Task.
         tasksList.Add(newTask); // adds the new task to the list of tasks. 
     }
 }
@@ -94,7 +92,7 @@ void WriteToTextFile()
     foreach (var task in tasksList)
     {
         refreshID++;
-        task.Id = refreshID; 
+        task.Id = refreshID;
         output.Add($"{task.Id},{task.Title},{task.DueDate},{task.Status},{task.Project}");
     }
 
@@ -104,17 +102,22 @@ void WriteToTextFile()
 }
 void ShowMenu(string menuType)
 {
-
+    int tasksToDo = tasksList.Count(task => !task.Status);
+    int tasksDone = tasksList.Count(task => task.Status);
+  
     switch (menuType)
     {
+
         case "main":
             Console.Clear();
+            Console.WriteLine();
             CreateMenuInfoText("Welcome to ToDoLy");
-            CreateMenuInfoText("You have X tasks todo and Y tasks are done", true);
+            CreateMenuInfoText($"You have {tasksToDo} tasks todo and {tasksDone} tasks are done", true);
+            Console.WriteLine();
             CreateMenuInfoText("Pick an option:");
             CreateMenuOptionsText("1", "Show Task List (by date or project)");
             CreateMenuOptionsText("2", "Add New Task");
-            CreateMenuOptionsText("3", "Edit Task (Update, mark as done, remove)");
+            CreateMenuOptionsText("3", "Edit Task (Update, Change Status, remove)");
             CreateMenuOptionsText("0", "Save and Quit");
 
             string userInput = Console.ReadLine();
@@ -126,7 +129,7 @@ void ShowMenu(string menuType)
             CreateMenuInfoText("Show Tasks:");
             CreateMenuOptionsText("1", "Sorted by Date");
             CreateMenuOptionsText("2", "Sorted by Project");
-            CreateMenuOptionsText("0", "Go Back!");
+            CreateMenuOptionsText("0", "Go back to Main Menu");
 
             userInput = Console.ReadLine();
             MenuChoice(userInput, "showTask");
@@ -135,7 +138,7 @@ void ShowMenu(string menuType)
             Console.Clear();
             CreateMenuInfoText("Add task:");
             CreateMenuOptionsText("1", "Create new task");
-            CreateMenuOptionsText("0", "Go Back!");
+            CreateMenuOptionsText("0", "Go back to Main Menu");
 
             userInput = Console.ReadLine();
             MenuChoice(userInput, "addTask");
@@ -193,20 +196,19 @@ void MenuChoice(string input, string menuType)
             {
                 case "1":
                     Console.Clear();
-                    //SortByDate
+
                     ShowTasksBySorted(tasksList, true);
                     Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break;  //SortByDate
                 case "2":
                     Console.Clear();
-                    //SortByProject
                     ShowTasksBySorted(tasksList, false);
                     Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break;  //SortByProject
                 case "0":
                     ShowMenu("main");
                     break;
@@ -225,7 +227,7 @@ void MenuChoice(string input, string menuType)
                     AddTask(tasksList, filePath);
                     WriteToTextFile();
                     ShowMenu("main");
-                    break;
+                    break;  //AddTask
                 case "0":
                     ShowMenu("main");
                     break;
@@ -240,107 +242,50 @@ void MenuChoice(string input, string menuType)
             {
                 case "1":
                     Console.Clear();
-                    Console.WriteLine(" - - - Update Title - - - ");
-                    Console.WriteLine($"Select a task number (1-{tasksList.Count}):\n");
+                    Console.WriteLine("\n - - - Update Title - - - ");
 
                     ShowTasks();
+                    SelectAndEditTask("Title");
 
-                    while (true)
-                    {
-                        Console.WriteLine($"Select a task number (1-{tasksList.Count}) to change:\n");
-                        string userInput = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(userInput))
-                        {
-                            UserFeedback($"Please select a task from above (1-{tasksList.Count})");
-                        }
-                        else
-                        {
-                            EditTask("Title", userInput);
-                            break;
-                        }
-                    }
-                    Console.WriteLine("Press any button to go back to Main Menu");
+                    Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break; // Update Title
                 case "2":
                     Console.Clear();
-                    Console.WriteLine(" - - - Mark a task as done - - - ");
-                    Console.WriteLine($"Select a task number (1-{tasksList.Count}):\n");
+                    Console.WriteLine("\n - - - Change Status of Task - - - ");
 
                     ShowTasks();
+                    SelectAndEditTask("Status");
 
-                    while (true)
-                    {
-                        Console.WriteLine($"Select a task number (1-{tasksList.Count}) to change:\n");
-                        string userInput = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(userInput))
-                        {
-                            UserFeedback($"Please select a task from above (1-{tasksList.Count})");
-                        }
-                        else
-                        {
-                            EditTask("Status", userInput);
-                            break;
-                        }
-                    }
-                    //MarkAsDone method here
-
-                    Console.WriteLine("Press any button to go back to Main Menu");
+                    Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break; // Check Uncheck
                 case "3":
 
                     Console.Clear();
-                    Console.WriteLine(" - - - Remove a task - - - ");
+                    Console.WriteLine("\n - - - Remove a task - - - ");
+
                     ShowTasks();
+                    SelectAndEditTask("Remove");
 
-                    while (true)
-                    {
-                        Console.WriteLine($"Select a task number (1-{tasksList.Count}) to Remove:\n");
-                        string userInput = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(userInput))
-                        {
-                            UserFeedback($"Please select a task to Remove from above (1-{tasksList.Count})");
-                        }
-                        else
-                        {
-                            EditTask("Remove", userInput);
-                            break;
-                        }
-                    }
-
-                    Console.WriteLine("Press any button to go back to Main Menu");
+                    Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break; // Remove a task
                 case "4":
                     Console.Clear();
-                    Console.WriteLine(" - - - Change The Date of a Task - - - ");
-                    Console.WriteLine($"Select a task number (1-{tasksList.Count}):\n");
+                    Console.WriteLine("\n - - - Change The Date of a Task - - - ");
+
 
                     ShowTasks();
+                    SelectAndEditTask("DueDate");
 
-                    while (true)
-                    {
-                        Console.WriteLine($"Select a task number (1-{tasksList.Count}) to change:\n");
-                        string userInput = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(userInput))
-                        {
-                            UserFeedback($"Please select a task from above (1-{tasksList.Count})");
-                        }
-                        else
-                        {
-                            EditTask("DueDate", userInput);
-                            break;
-                        }
-                    }
-                    
-                    Console.WriteLine("Press any button to go back to Main Menu");
+                    Console.WriteLine("\nPress any button to go back to Main Menu");
                     Console.ReadLine();
                     ShowMenu("main");
-                    break;
+                    break; //Change Date
                 case "0":
                     ShowMenu("main");
                     break;
@@ -351,23 +296,50 @@ void MenuChoice(string input, string menuType)
             break;
     }
 }
+void SelectAndEditTask(string editType)
+{
+    while (true)
+    {
+        Console.WriteLine($"Select a task number (1-{tasksList.Count}) to change:\n");
+        string userInput = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(userInput))
+        {
+            UserFeedback($"Please select a task from above (1-{tasksList.Count})");
+        }
+        else if (int.TryParse(userInput, out int selectedTaskId) && selectedTaskId >= 1 && selectedTaskId <= tasksList.Count)
+        {
+            EditTask(editType, userInput);
+            break;
+        }
+        else
+        {
+            UserFeedback($"Invalid task number. Please enter a valid task number between 1 and {tasksList.Count}");
+        }
+    }
+}
 void ShowTasks()
 {
+    int padding = 20;
+    Console.WriteLine("| Nr: ".PadRight(padding - 10) + "| Title ".PadRight(padding) + "| Duedate".PadRight(padding) + "| Status".PadRight(padding) + "| Project");
     foreach (var task in tasksList)
     {
 
         if (task.Status == true)
         {
-            Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Finished,{task.Project}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Finished".PadRight(padding) + $"| {task.Project}");
         }
         else
         {
-            Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Unfinished,{task.Project}");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Unfinished".PadRight(padding) + $"| {task.Project}");
         }
     }
 }
-void ShowTasksBySorted(List<Task> tasksList, bool byDate)
+void ShowTasksBySorted(List<TodoListApp.Task> tasksList, bool byDate)
 {
+    int padding = 20;
+    Console.WriteLine("| Nr: ".PadRight(padding - 10) + "| Title ".PadRight(padding) + "| Duedate".PadRight(padding) + "| Status".PadRight(padding) + "| Project");
     if (byDate)
     {
         tasksList = tasksList.OrderBy(asset => asset.DueDate).ToList();
@@ -375,11 +347,13 @@ void ShowTasksBySorted(List<Task> tasksList, bool byDate)
         {
             if (task.Status == true)
             {
-                Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Finished,{task.Project}");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Finished".PadRight(padding) + $"| {task.Project}");
             }
             else
             {
-                Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Unfinished,{task.Project}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Unfinished".PadRight(padding) + $"| {task.Project}");
             }
         }
 
@@ -391,11 +365,13 @@ void ShowTasksBySorted(List<Task> tasksList, bool byDate)
         {
             if (task.Status == true)
             {
-                Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Finished,{task.Project}");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Finished".PadRight(padding) + $"| {task.Project}");
             }
             else
             {
-                Console.WriteLine($"{task.Id},{task.Title},{task.DueDate.ToShortDateString()},Unfinished,{task.Project}");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"| {task.Id} ".PadRight(padding - 10) + $"| {task.Title}".PadRight(padding) + $"| {task.DueDate.ToShortDateString()}".PadRight(padding) + "| Unfinished".PadRight(padding) + $"| {task.Project}");
             }
         }
     }
@@ -414,20 +390,22 @@ void EditTask(string EditType, string userInput)
             string newValue = Console.ReadLine();
             tasksList[userInputToInt].Title = newValue;
             WriteToTextFile();
-            Console.WriteLine($"The Title have been changed to {newValue}");
+
+            UserFeedback($"The Title have been changed to {newValue}", false);
             break;
         case "Status":
             bool oldValue = tasksList[userInputToInt].Status;
             bool newBoolValue = tasksList[userInputToInt].Status = !oldValue;
 
-                WriteToTextFile();
+            WriteToTextFile();
 
-            if(newBoolValue == false)
+            if (newBoolValue == false)
             {
-                Console.WriteLine($"The Status have been changed to \"Unfinished\"");
-            }else
+                UserFeedback($"The Status have been changed to \"Unfinished\"", false);
+            }
+            else
             {
-                Console.WriteLine($"The Status have been changed to \"Finished\"");
+                UserFeedback($"The Status have been changed to \"Finished\"", false);
             }
             break;
         case "Remove":
@@ -438,45 +416,51 @@ void EditTask(string EditType, string userInput)
             CreateMenuOptionsText("2", "Cancel");
 
             Console.Write("Enter your choice: ");
-            if (int.TryParse(Console.ReadLine(), out int value))
+
+            while (true)
             {
-                if (value >= 1 && value <= 2)
+                string DeleteCheckInput = Console.ReadLine();
+
+                if (!string.IsNullOrWhiteSpace(DeleteCheckInput))
                 {
-                    switch (value)
+                    if (DeleteCheckInput == "1")
                     {
-                        case 1:
-                            // Delete the task
-                            tasksList.RemoveAt(userInputToInt);
-                            Console.WriteLine("Task deleted successfully!");
-                            WriteToTextFile();
-                            break;
-                        case 2:
-                            Console.WriteLine("Deletion cancelled.");
-                            break;
+                        tasksList.RemoveAt(userInputToInt);
+                        UserFeedback("Task deleted successfully!", false);
+                        WriteToTextFile();
+                        break; // Exit the loop after valid input
+                    }
+                    else if (DeleteCheckInput == "2")
+                    {
+                        UserFeedback("Deletion cancelled.", false);
+                        break; // Exit the loop after valid input
+                    }
+                    else
+                    {
+                        // User input is not within the valid options
+                        UserFeedback("Please enter either 1 or 2");
+                        // Continue the loop to prompt the user for valid input
                     }
                 }
                 else
                 {
-                    // User input is not within the valid range
-                    UserFeedback("Please enter a number between 0 and 2");
+                    // Handle empty input
+                    UserFeedback("Please enter either 1 or 2");
+                    // Continue the loop to prompt the user for valid input
                 }
-            }
-            else
-            {
-                // User input is not a valid integer
-                UserFeedback("Please enter a valid number");
             }
             break;
         case "DueDate":
-            
+
             while (true)
             {
                 Console.Write("Enter a Date (yyyy-MM-dd): ");
                 DateTime oldDate = tasksList[userInputToInt].DueDate;
                 Console.Clear();
-                Console.Write($"Change {oldDate} to: ");
+                Console.Write($"Change {oldDate.ToShortDateString()} to: ");
                 string newInputDueDate = Console.ReadLine();
                 DateTime newDueDate = default;
+
                 if (string.IsNullOrWhiteSpace(newInputDueDate))
                 {
                     UserFeedback("Please enter a dueDate, ex: 2020-01-01");
@@ -485,7 +469,7 @@ void EditTask(string EditType, string userInput)
                 {
                     tasksList[userInputToInt].DueDate = newDueDate;
                     WriteToTextFile();
-                    Console.WriteLine($"The Title have been changed to {newDueDate}");
+                    Console.WriteLine($"The Title have been changed to {newDueDate}", false);
                     break;
                 }
                 else
@@ -495,7 +479,7 @@ void EditTask(string EditType, string userInput)
             }
             break;
         default:
-            UserFeedback("something went wrong, please try again", true);
+            UserFeedback("something went wrong, please try again");
             break;
     }
 
@@ -556,23 +540,4 @@ static void UserFeedback(string msg, bool errorMsg = true)
         Console.ForegroundColor = ConsoleColor.White;
     }
 
-}
-//----------------------------
-
-internal class Task
-{
-    public Task(int id, string title, DateTime dueDate, bool status, string project)
-    {
-        Id = id;
-        Title = title;
-        DueDate = dueDate;
-        Status = status;
-        Project = project;
-    }
-
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public DateTime DueDate { get; set; }
-    public bool Status { get; set; }
-    public string Project { get; set; }
 }
