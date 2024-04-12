@@ -467,7 +467,7 @@ void EditTask(string EditType, string userInput)
                 {
                     tasksList[userInputToInt].DueDate = newDueDate;
                     WriteToTextFile();
-                    Console.WriteLine($"The Title have been changed to {newDueDate.ToShortDateString()}", false);
+                    Console.WriteLine($"The DueDate have been changed to {newDueDate.ToShortDateString()}", false);
                     break;
                 }
                 else

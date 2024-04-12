@@ -8,3 +8,5 @@
 8,Update project documentation,2024-04-13 00:00:00,True,Documentation
 9,Call mom for her birthday,2024-04-19 00:00:00,False,Personal
 10,Plan weekend getaway,2024-04-22 00:00:00,False,Personal
+11,TEST2,2020-01-01 00:00:00,False,TEST
+12,Coding with friends,2024-09-12 00:00:00,False,Coding party
